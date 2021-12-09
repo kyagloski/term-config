@@ -1,2 +1,1 @@
--.tmux.config <br />
--optimal setup script
+setup files for terminal
