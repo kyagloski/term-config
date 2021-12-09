@@ -1,2 +1,2 @@
-my .tmux.config <br />
-+ script for optimal setup
+-.tmux.config <br />
+-optimal setup script
