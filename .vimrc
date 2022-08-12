@@ -23,3 +23,7 @@ set tabstop=4
 set softtabstop=0 noexpandtab
 set shiftwidth=4
 set tabstop=8 softtabstop=0 expandtab shiftwidth=4 smarttab
+
+" REMAPPING (only works on some machines (not wsl1))
+nnoremap <C-Up> 5k
+nnoremap <C-Down> 5j
