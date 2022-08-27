@@ -8,6 +8,7 @@ alias dc="cd"
 alias l="ls -lha" 
 alias ll="ls -lha" 
 alias la="ls -a" 
+alias dud="du -h -d 0"
 
 # REQUIRES: cowsay, lolcat(gem install), fortune-mod, neofetch
 neofetch --ascii "$(fortune -s | cowsay -f $(ls /usr/share/cowsay/cows/ | shuf -n1))" | lolcat -ats 2500 
