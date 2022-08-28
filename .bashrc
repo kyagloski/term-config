@@ -11,4 +11,19 @@ alias la="ls -a"
 alias dud="du -h -d 0"
 
 # REQUIRES: cowsay, lolcat(gem install), fortune-mod, neofetch
-neofetch --ascii "$(fortune -s | cowsay -f $(ls /usr/share/cowsay/cows/ | shuf -n1))" | lolcat -ats 2500 
+#neofetch --ascii "$(fortune -s | cowsay -f $(ls /usr/share/cowsay/cows/ | shuf -n1))" | lolcat -ats 2500 
+
+# switch audio devices 
+export AUDIO_PROF=0
+audio_switch() {
+    card="alsa_card.pci-0000_0d_00.4"
+    profiles=("output:analog-stereo" "output:iec958-stereo")
+    ((AUDIO_PROF=AUDIO_PROF+1))
+    if [ $AUDIO_PROF -ge ${#profiles[@]} ]; then
+        export AUDIO_PROF=0
+    fi
+    echo ${profiles[$AUDIO_PROF]}
+    pactl set-card-profile $card ${profiles[$AUDIO_PROF]}
+}
+alias s="audio_switch"
+
