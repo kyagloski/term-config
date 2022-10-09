@@ -1,11 +1,11 @@
 #!/bin/bash
-set -x
+set -xpulseaudio -k
 if [ $EUID != 0 ]; then
     sudo "$0" "$@"
     exit $?
 fi
 
-<<comment
+<<commentpulseaudio -k
 preliminary steps:
     -grab vpn configs (/srv/vpn/net-vpn.ovpn)
     -setup hotkeys
@@ -118,6 +118,7 @@ sed -i '/wifi.powersave/c\wifi.powersave = 2' /etc/NetworkManager/conf.d/default
 
 # fix audio
 sed -i '/load-module module-switch-on-port-available/c\#load-module module-switch-on-port-available' /etc/pulse/default.pa
+pulseaudio -k
 
 set +x 
 echo "the computer will now reboot, is this ok y/n?"
