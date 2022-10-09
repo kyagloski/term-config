@@ -47,6 +47,8 @@ rm -rf /home/$user/Videos
 
 echo "basics"
 apt update
+ubuntu-drivers devices
+ubuntu-drivers autoinstall
 apt -y install vim git tmux openvpn neofetch
 
 neofetch
