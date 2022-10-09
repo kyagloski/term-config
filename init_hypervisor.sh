@@ -116,6 +116,9 @@ rm master.zip
 # fix wifi power management
 sed -i '/wifi.powersave/c\wifi.powersave = 2' /etc/NetworkManager/conf.d/default-wifi-powersave-on.conf
 
+# fix audio
+sed -i '/load-module module-switch-on-port-available/c\#load-module module-switch-on-port-available' /etc/pulse/default.pa
+
 set +x 
 echo "the computer will now reboot, is this ok y/n?"
 read choice
