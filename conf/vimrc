@@ -14,8 +14,8 @@ set ruler
 syntax on
 set showcmd
 set mouse=a
-
 set ai
+set nowrap
 
 colo delek
 
