@@ -9,7 +9,7 @@ set hlsearch
 set noerrorbells
 set novisualbell
 set background=dark
-"set number
+set number
 set ruler
 syntax on
 set showcmd

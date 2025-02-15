@@ -1,1 +1,1 @@
-setup files for terminal
+my common configuration files for generic terminal use
