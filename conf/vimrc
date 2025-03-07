@@ -35,4 +35,6 @@ nnoremap <C-Down> 5j
 nnoremap <C-K> 5k
 nnoremap <C-J> 5j
 
-
+vmap <C-c> :w! ~/.vimbuffer<CR>
+nmap <C-c> :.w! ~/.vimbuffer<CR>
+map <C-p> :r ~/.vimbuffer<CR>
