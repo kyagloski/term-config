@@ -35,6 +35,7 @@ nnoremap <C-Down> 5j
 nnoremap <C-K> 5k
 nnoremap <C-J> 5j
 
-vmap <C-c> :w! ~/.vimbuffer<CR>
-nmap <C-c> :.w! ~/.vimbuffer<CR>
+vmap <C-y> :w! ~/.vimbuffer<CR>
+nmap <C-y> :.w! ~/.vimbuffer<CR>
 map <C-p> :r ~/.vimbuffer<CR>
+map <C-n> :set number! relativenumber!<CR>
