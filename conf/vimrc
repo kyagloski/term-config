@@ -39,3 +39,5 @@ vmap <C-y> :w! ~/.vimbuffer<CR>
 nmap <C-y> :.w! ~/.vimbuffer<CR>
 map <C-p> :r ~/.vimbuffer<CR>
 map <C-n> :set number! relativenumber!<CR>
+
+set timeoutlen=1000 ttimeoutlen=0
