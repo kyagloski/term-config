@@ -10,6 +10,7 @@ alias ll="ls -lha"
 alias la="ls -a" 
 alias dud="du -h -d 0"
 alias sc="source ~/.bashrc; tmux source ~/.tmux.conf; echo sourced dotfiles!"
+shopt -s autocd
 
 alias dcs='docker container ls --all --format "table {{.Names}}\t{{.Command}}\t{{.Status}}\t{{.CreatedAt}}"'
 

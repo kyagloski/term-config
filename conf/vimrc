@@ -13,7 +13,7 @@ set background=dark
 set number
 set relativenumber
 
-set showmatch " show the matching part of pairs [] {} and () "
+"set showmatch " show the matching part of pairs [] {} and () "
 
 set ruler
 syntax on
