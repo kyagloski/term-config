@@ -12,6 +12,7 @@ set novisualbell
 set background=dark
 set number
 set relativenumber
+set shellcmdflag=-ic
 
 "set showmatch " show the matching part of pairs [] {} and () "
 

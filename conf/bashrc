@@ -4,6 +4,7 @@
 stty -ixon # disables ctrl-s freeze 
 alias r='sudo su' # alias su root
 alias sl="ls" 
+alias cd="cd -P"
 alias dc="cd" 
 alias l="ls -lha" 
 alias ll="ls -lha" 
@@ -11,8 +12,15 @@ alias la="ls -a"
 alias dud="du -h -d 0"
 alias sc="source ~/.bashrc; tmux source ~/.tmux.conf; echo sourced dotfiles!"
 shopt -s autocd
+shopt -s expand_aliases
 
 alias dcs='docker container ls --all --format "table {{.Names}}\t{{.Command}}\t{{.Status}}\t{{.CreatedAt}}"'
+
+alias aleq="column -t -s = -o ="
+findf() { 
+    echo $1; 
+    find . -type f -name $1 
+}
 
 # REQUIRES: cowsay, lolcat(gem install), fortune-mod, neofetch
 # cmd: sudo apt install -y cowsay lolcat fortune-mod neofetch
