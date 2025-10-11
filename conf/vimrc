@@ -5,7 +5,7 @@ set autoread
 set history=500
 set wildmenu
 set backspace=eol,start,indent
-set whichwrap+=<,>,h,l
+"set whichwrap+=<,>,h,l
 set hlsearch " enable highlight search pattern "
 set noerrorbells
 set novisualbell
@@ -22,7 +22,8 @@ set showcmd
 set mouse=a
 set nowrap
 
-colo koehler
+"colo koehler
+colo default
 
 set tabstop	    =4
 set softtabstop	=4
@@ -43,4 +44,81 @@ map <C-n> :set number! relativenumber!<CR>
 
 set timeoutlen=1000 ttimeoutlen=0
 set laststatus=2
-highlight StatusLine ctermfg=white ctermbg=black
+
+
+" === Sorbet with Transparent Background and Bold Keywords ===
+if has('termguicolors')
+  set termguicolors
+endif
+
+colorscheme sorbet
+
+" --- Transparency ---
+hi! Normal guibg=NONE ctermbg=NONE
+hi! NormalNC guibg=NONE ctermbg=NONE
+hi! SignColumn guibg=NONE ctermbg=NONE
+hi! LineNr guibg=NONE ctermbg=NONE
+hi! CursorLineNr guibg=NONE ctermbg=NONE
+hi! NonText guibg=NONE ctermbg=NONE
+hi! Folded guibg=NONE ctermbg=NONE
+hi! VertSplit guibg=NONE ctermbg=NONE
+hi! StatusLine guibg=NONE ctermbg=NONE
+hi! StatusLineNC guibg=NONE ctermbg=NONE
+hi! Pmenu guibg=NONE ctermbg=NONE
+hi! PmenuSel guibg=NONE ctermbg=NONE
+hi! PmenuSbar guibg=NONE ctermbg=NONE
+hi! PmenuThumb guibg=NONE ctermbg=NONE
+hi! TelescopeNormal guibg=NONE ctermbg=NONE
+hi! FloatBorder guibg=NONE ctermbg=NONE
+hi! NormalFloat guibg=NONE ctermbg=NONE
+hi! TabLineFill guibg=NONE ctermbg=NONE
+hi! TabLine guibg=NONE ctermbg=NONE
+hi! TabLineSel guibg=NONE ctermbg=NONE
+
+" --- Bold Keywords (language structure) ---
+hi! Keyword gui=bold cterm=bold
+hi! Conditional gui=bold cterm=bold
+hi! Repeat gui=bold cterm=bold
+hi! Operator gui=NONE cterm=NONE
+hi! Statement gui=bold cterm=bold
+hi! Function gui=bold cterm=bold
+hi! Type gui=bold cterm=bold
+hi! Return gui=bold cterm=bold
+
+" --- Optional: transparent floating windows for Neovim ---
+if exists(':nvim_set_hl')
+  call nvim_set_hl(0, 'Normal', {'bg': 'NONE'})
+endif
+
+" --- Auto-reapply transparency when colorscheme reloads ---
+augroup TransparentSorbet
+  autocmd!
+  autocmd ColorScheme * hi! Normal guibg=NONE ctermbg=NONE
+  autocmd ColorScheme * hi! NormalNC guibg=NONE ctermbg=NONE
+  autocmd ColorScheme * hi! SignColumn guibg=NONE ctermbg=NONE
+  autocmd ColorScheme * hi! Pmenu guibg=NONE ctermbg=NONE
+  autocmd ColorScheme * hi! PmenuSel guibg=NONE ctermbg=NONE
+  autocmd ColorScheme * hi! NormalFloat guibg=NONE ctermbg=NONE
+  autocmd ColorScheme * hi! FloatBorder guibg=NONE ctermbg=NONE
+  autocmd ColorScheme * hi! Keyword gui=bold cterm=bold
+  autocmd ColorScheme * hi! Conditional gui=bold cterm=bold
+  autocmd ColorScheme * hi! Repeat gui=bold cterm=bold
+  autocmd ColorScheme * hi! Statement gui=bold cterm=bold
+  autocmd ColorScheme * hi! Function gui=bold cterm=bold
+  autocmd ColorScheme * hi! Type gui=bold cterm=bold
+  autocmd ColorScheme * hi! Return gui=bold cterm=bold
+augroup END
+hi! Comment gui=italic cterm=italic
+
+" Make the status line text white with transparent background
+hi! StatusLine guifg=#ffffff guibg=NONE ctermfg=white ctermbg=NONE gui=bold
+hi! StatusLineNC guifg=#aaaaaa guibg=NONE ctermfg=lightgray ctermbg=NONE
+
+" --- Softer highlight colors (light gray instead of orange) ---
+hi! Visual guibg=#3a3a3a ctermbg=238 guifg=NONE ctermfg=NONE
+hi! Search guibg=#4a4a4a ctermbg=239 guifg=#ffffff ctermfg=white
+hi! IncSearch guibg=#5a5a5a ctermbg=240 guifg=#ffffff ctermfg=white
+
+" --- Line numbers ---
+" Relative line numbers (other lines)
+hi! LineNr guifg=#a89984 ctermfg=244 guibg=NONE ctermbg=NONE
