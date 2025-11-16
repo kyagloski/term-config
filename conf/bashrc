@@ -11,6 +11,9 @@ alias ll="ls -lha"
 alias la="ls -a" 
 alias dud="du -h -d 0"
 alias sc="source ~/.bashrc; tmux source ~/.tmux.conf; echo sourced dotfiles!"
+alias c="clear"
+alias cd="cd -P"
+alias cp="cp -vrn" # verbose, recurse, no-overwrite 
 shopt -s autocd
 shopt -s expand_aliases
 
@@ -25,8 +28,9 @@ findf() {
 # REQUIRES: cowsay, lolcat(gem install), fortune-mod, neofetch
 # cmd: sudo apt install -y cowsay lolcat fortune-mod neofetch
 #neofetch --ascii "$(fortune -s | cowsay -f $(ls /usr/share/cowsay/cows/ | shuf -n1))" | lolcat -ats 2500 
-neofetch
+#neofetch
+fastfetch
 
 # new HALLOWEEN prompt
-PS1='\[\e[0;1;3;38;5;141m\]\u\[\e[0;92m\]@\[\e[0;1;3;38;5;227m\]\h\[\e[0;1m\]:\[\e[0m\](\[\e[0;94m\]\w\[\e[0m\])\[\e[0;1;92m\]$ \[\e[0m\]'
+#PS1='\[\e[0;1;3;38;5;141m\]\u\[\e[0;92m\]@\[\e[0;1;3;38;5;227m\]\h\[\e[0;1m\]:\[\e[0m\](\[\e[0;94m\]\w\[\e[0m\])\[\e[0;1;92m\]$ \[\e[0m\]'
 

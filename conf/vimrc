@@ -28,7 +28,6 @@ colo default
 set tabstop	    =4
 set softtabstop	=4
 set shiftwidth	=4
-set textwidth	=79
 set expandtab
 
 nnoremap <C-Up> 5k
@@ -122,3 +121,18 @@ hi! IncSearch guibg=#5a5a5a ctermbg=240 guifg=#ffffff ctermfg=white
 " --- Line numbers ---
 " Relative line numbers (other lines)
 hi! LineNr guifg=#a89984 ctermfg=244 guibg=NONE ctermbg=NONE
+
+
+" Enable relative line numbers and absolute number for current line
+set number
+set relativenumber
+
+" Define highlight colors for the line numbers
+" Normal line numbers (non-current)
+highlight LineNr ctermfg=DarkGray guifg=#888888
+
+" Current line number (the one on the cursor line)
+highlight CursorLineNr ctermfg=Green guifg=Green
+
+" Ensure cursor line number highlighting is visible
+set cursorline
