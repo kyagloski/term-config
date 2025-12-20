@@ -1,3 +1,7 @@
+
+"*************************************************************
+" BASIC CONFIG
+"*************************************************************
 set nocompatible
 set ignorecase " enable smartcase search sensitivity "
 set smartcase
@@ -5,16 +9,10 @@ set autoread
 set history=500
 set wildmenu
 set backspace=eol,start,indent
-"set whichwrap+=<,>,h,l
 set hlsearch " enable highlight search pattern "
 set noerrorbells
 set novisualbell
-set background=dark
-set number
-set relativenumber
 set shellcmdflag=-ic
-
-"set showmatch " show the matching part of pairs [] {} and () "
 
 set ruler
 syntax on
@@ -22,39 +20,107 @@ set showcmd
 set mouse=a
 set nowrap
 
-"colo koehler
-colo default
-
 set tabstop	    =4
 set softtabstop	=4
 set shiftwidth	=4
 set expandtab
 
+set timeoutlen=1000 ttimeoutlen=0
+set laststatus=2
+
+" Restore cursor position when reopening a file
+augroup remember_cursor
+  autocmd!
+  autocmd BufReadPost *
+        \ if line("'\"") > 0 && line("'\"") <= line("$") |
+        \   execute "normal! g`\"" |
+        \ endif
+augroup END
+
+"*************************************************************
+" KEYBIND CONFIG
+"*************************************************************
 nnoremap <C-Up> 5k
 nnoremap <C-Down> 5j
-
 vnoremap <C-Up> 5k
 vnoremap <C-Down> 5j
-
 nnoremap <C-K> 5k
 nnoremap <C-J> 5j
+
+nnoremap <C-S-Left>  <C-w>h
+nnoremap <C-S-Right> <C-w>l
+nnoremap <C-S-Up>    <C-w>k
+nnoremap <C-S-Down>  <C-w>j
 
 vmap <C-y> :w! ~/.vimbuffer<CR>
 nmap <C-y> :.w! ~/.vimbuffer<CR>
 map <C-p> :r ~/.vimbuffer<CR>
 map <C-n> :set number! relativenumber!<CR>
 
-set timeoutlen=1000 ttimeoutlen=0
-set laststatus=2
+"*************************************************************
+" NETRW CONFIG
+"*************************************************************
+let g:netrw_browse_split = 2
+let g:netrw_keepdir = 1
+let g:netrw_liststyle = 3
+let g:netrw_banner = 0
+
+" Set width to 25% of screen
+let g:netrw_winsize = -30
+let g:netrw_altv = 1
+
+" Optional: Open netrw on startup
+augroup ProjectDrawer
+  autocmd!
+  autocmd VimEnter * if argc() > 0 | Lexplore | wincmd p | else | Lexplore | endif
+augroup END
+
+augroup AutoCloseNetrw
+  autocmd!
+  autocmd WinEnter * if winnr('$') == 1 && &filetype == "netrw" | quit | endif
+augroup END
+
+" Balance all non-netrw windows
+augroup SmartBalance
+  autocmd!
+  " After opening new window, equalize but preserve netrw width
+  autocmd WinNew * call BalanceNonNetrw()
+augroup END
+
+function! BalanceNonNetrw()
+  " Save netrw window number and width
+  let netrw_win = bufwinnr('NetrwTreeListing')
+  if netrw_win == -1
+    " No netrw, just balance normally
+    wincmd =
+    return
+  endif
+  
+  " Store netrw width
+  let current_win = winnr()
+  execute netrw_win . 'wincmd w'
+  let netrw_width = winwidth(0)
+  execute current_win . 'wincmd w'
+  
+  " Balance all windows
+  wincmd =
+  
+  " Restore netrw width
+  execute netrw_win . 'wincmd w'
+  execute 'vertical resize ' . netrw_width
+  execute current_win . 'wincmd w'
+endfunction
 
 
+"*************************************************************
+" VISUAL CONFIG
+"*************************************************************
 " === Sorbet with Transparent Background and Bold Keywords ===
 if has('termguicolors')
   set termguicolors
 endif
-
-colorscheme sorbet
-
+colo sorbet
+set background=dark
 " --- Transparency ---
 hi! Normal guibg=NONE ctermbg=NONE
 hi! NormalNC guibg=NONE ctermbg=NONE
@@ -76,7 +142,6 @@ hi! NormalFloat guibg=NONE ctermbg=NONE
 hi! TabLineFill guibg=NONE ctermbg=NONE
 hi! TabLine guibg=NONE ctermbg=NONE
 hi! TabLineSel guibg=NONE ctermbg=NONE
-
 " --- Bold Keywords (language structure) ---
 hi! Keyword gui=bold cterm=bold
 hi! Conditional gui=bold cterm=bold
@@ -86,12 +151,10 @@ hi! Statement gui=bold cterm=bold
 hi! Function gui=bold cterm=bold
 hi! Type gui=bold cterm=bold
 hi! Return gui=bold cterm=bold
-
 " --- Optional: transparent floating windows for Neovim ---
 if exists(':nvim_set_hl')
   call nvim_set_hl(0, 'Normal', {'bg': 'NONE'})
 endif
-
 " --- Auto-reapply transparency when colorscheme reloads ---
 augroup TransparentSorbet
   autocmd!
@@ -111,31 +174,25 @@ augroup TransparentSorbet
   autocmd ColorScheme * hi! Return gui=bold cterm=bold
 augroup END
 hi! Comment gui=italic cterm=italic
-
 " Make the status line text white with transparent background
 hi! StatusLine guifg=#ffffff guibg=NONE ctermfg=white ctermbg=NONE gui=bold
 hi! StatusLineNC guifg=#aaaaaa guibg=NONE ctermfg=lightgray ctermbg=NONE
-
 " --- Softer highlight colors (light gray instead of orange) ---
 hi! Visual guibg=#3a3a3a ctermbg=238 guifg=NONE ctermfg=NONE
 hi! Search guibg=#4a4a4a ctermbg=239 guifg=#ffffff ctermfg=white
 hi! IncSearch guibg=#5a5a5a ctermbg=240 guifg=#ffffff ctermfg=white
-
 " --- Line numbers ---
 " Relative line numbers (other lines)
 hi! LineNr guifg=#a89984 ctermfg=244 guibg=NONE ctermbg=NONE
-
-
 " Enable relative line numbers and absolute number for current line
 set number
 set relativenumber
-
 " Define highlight colors for the line numbers
 " Normal line numbers (non-current)
 highlight LineNr ctermfg=DarkGray guifg=#888888
-
 " Current line number (the one on the cursor line)
 highlight CursorLineNr ctermfg=Green guifg=Green
-
 " Ensure cursor line number highlighting is visible
 set cursorline
+
+
