@@ -11,13 +11,16 @@ alias ll="ls -lha"
 alias la="ls -a" 
 alias dud="du -h -d 0"
 alias sc="source ~/.bashrc; tmux source ~/.tmux.conf; echo sourced dotfiles!"
+alias tm="tmux split-window -h btop \; select-pane -t 0 \; split-window -v htop \; select-pane -t 0 \; send-keys 'nvtop' C-m"
 alias c="clear"
 alias cd="cd -P"
 alias cp="cp -vrn" # verbose, recurse, no-overwrite 
+alias dfm="dolphin . > /dev/null 2>&1 &"
 shopt -s autocd
 shopt -s expand_aliases
 
 alias dcs='docker container ls --all --format "table {{.Names}}\t{{.Command}}\t{{.Status}}\t{{.CreatedAt}}"'
+alias dcp='docker container ls --all --format "table {{.Names}}\t{{.Ports}}"'
 
 alias aleq="column -t -s = -o ="
 findf() { 
