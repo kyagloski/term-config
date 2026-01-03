@@ -57,6 +57,8 @@ nmap <C-y> :.w! ~/.vimbuffer<CR>
 map <C-p> :r ~/.vimbuffer<CR>
 map <C-n> :set number! relativenumber!<CR>
 
+vnoremap <C-C> :w !xclip -i -sel c<CR><CR> " clipboard copy
+
 "*************************************************************
 " NETRW CONFIG
 "*************************************************************
@@ -174,6 +176,8 @@ augroup TransparentSorbet
   autocmd ColorScheme * hi! Return gui=bold cterm=bold
 augroup END
 hi! Comment gui=italic cterm=italic
+hi! ModeMsg guibg=#0000ff ctermbg=BLUE gui=bold cterm=bold
+hi! StatusLineNC guifg=#aaaaaa guibg=NONE ctermfg=None ctermbg=NONE gui=NONE cterm=NONE
 " Make the status line text white with transparent background
 hi! StatusLine guifg=#ffffff guibg=NONE ctermfg=white ctermbg=NONE gui=bold
 hi! StatusLineNC guifg=#aaaaaa guibg=NONE ctermfg=lightgray ctermbg=NONE
