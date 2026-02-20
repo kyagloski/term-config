@@ -57,6 +57,8 @@ nmap <C-y> :.w! ~/.vimbuffer<CR>
 map <C-p> :r ~/.vimbuffer<CR>
 map <C-n> :set number! relativenumber!<CR>
 
+imap <C-v> <Esc><C-v>
+
 vnoremap <C-C> :w !xclip -i -sel c<CR><CR> " clipboard copy
 
 "*************************************************************
