@@ -37,6 +37,9 @@ augroup remember_cursor
         \ endif
 augroup END
 
+" search for tags file
+set tags=./tags;,tags;
+
 "*************************************************************
 " KEYBIND CONFIG
 "*************************************************************
@@ -46,11 +49,17 @@ vnoremap <C-Up> 5k
 vnoremap <C-Down> 5j
 nnoremap <C-K> 5k
 nnoremap <C-J> 5j
+inoremap <C-Up> <Esc>5k i
+inoremap <C-Down> <Esc>5j i
 
 nnoremap <C-S-Left>  <C-w>h
 nnoremap <C-S-Right> <C-w>l
 nnoremap <C-S-Up>    <C-w>k
 nnoremap <C-S-Down>  <C-w>j
+inoremap <C-S-Left>  <Esc><C-w>h
+inoremap <C-S-Right> <Esc><C-w>l
+inoremap <C-S-Up>    <Esc><C-w>k
+inoremap <C-S-Down>  <Esc><C-w>j
 
 vmap <C-y> :w! ~/.vimbuffer<CR>
 nmap <C-y> :.w! ~/.vimbuffer<CR>
