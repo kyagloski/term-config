@@ -1,0 +1,5 @@
+if [ -f ~/.bashrc ]; then
+    source ~/.bashrc
+fi
+_spin_done=0
+PROMPT_COMMAND='if [[ $_spin_done -eq 0 ]]; then _spin_done=1; python3 ~/.spin-fetch.py; fi'
