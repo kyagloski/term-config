@@ -1,18 +1,4 @@
 #!/usr/bin/env python3
-"""
-debian-spin.py  –  3-D extruded Debian swirl spinning around the Y-axis.
-                   Uses the real fastfetch Debian logo characters as the
-                   face texture. Side-walls show extrusion depth with │ chars.
-
-Requirements : Python 3.8+, numpy   (pip install numpy --break-system-packages)
-Optional     : fastfetch in PATH
-
-Usage:
-  python3 debian-spin.py            # loops forever  (Ctrl+C to exit)
-  python3 debian-spin.py --once     # one full rotation then exit
-  python3 debian-spin.py --fps 24   # override fps (default 30)
-"""
-
 import sys, os, math, time, signal, subprocess, shutil
 import threading, termios, tty
 try:
@@ -30,23 +16,6 @@ BOLD  = '\033[1m'
 
 def rgb(r, g, b):  return f'\033[38;2;{r};{g};{b}m'
 
-# Prebuilt 256-entry colour ramps  (dark maroon → bright Debian red)
-#def _face_lut(n=256):
-#    out = []
-#    for i in range(n):
-#        t = i / (n - 1)
-#        out.append(rgb(int(16 + t*(255-16)), int(3 + t*(15-3)), int(5 + t*(90-5))))
-#    return out
-#
-#def _edge_lut(n=256):
-#    # Side-wall: slightly warmer/orange tint
-#    out = []
-#    for i in range(n):
-#        t = i / (n - 1)
-#        out.append(rgb(int(30 + t*(255-30)), int(10 + t*(60-10)), int(4 + t*(30-4))))
-#    return out
-
-# green
 def _face_lut(n=256):
     out = []
     for i in range(n):
@@ -70,7 +39,6 @@ def face_col(b: float) -> str:
 def edge_col(b: float) -> str:
     return EDGE_LUT[min(255, max(0, round(b * 255)))]
 
-# ─── The real fastfetch Debian logo ───────────────────────────────────────────
 _LOGO_RAW = [
     "         _,met$$$$$gg.     ",
     "      ,g$$$$$$$$$$$$$$$P.  ",
@@ -99,7 +67,6 @@ logo_arr  = np.array([list(row) for row in LOGO], dtype='U1')   # [LH, LW]
 logo_mask = logo_arr != ' '                                       # [LH, LW]
 
 
-# ─── 3-D render constants ─────────────────────────────────────────────────────
 THICK     = 0.09      # extrusion half-thickness in normalised x-units
 EDGE_SOFT = 0.06      # |cos a| below this → edge-on silhouette mode
 
@@ -132,9 +99,6 @@ def render(angle: float) -> list[str]:
     edge_on      = abs(ca) < EDGE_SOFT
     front_closer = ca > 0
 
-    # ── Object-space x for each screen column hitting front / back face ──
-    #   Front face z=+THICK : x_obj = (px − THICK·sin a) / cos a
-    #   Back  face z=−THICK : x_obj = (px + THICK·sin a) / cos a
     x_front = (PX_1D - THICK * sa) / safe_ca   # [LW]
     x_back  = (PX_1D + THICK * sa) / safe_ca   # [LW]
 
@@ -145,26 +109,12 @@ def render(angle: float) -> list[str]:
     back_in  = _in_range(x_back)
 
     # ── Lighting ──────────────────────────────────────────────────────────
-    #fn = LX * sa + LZ * ca
-    #fb = max(0.12, fn) ** 0.60 * 0.90 + 0.06
-    #bn = -LX * sa - LZ * ca
-    #bb = max(0.04, bn) ** 0.60 * 0.50 + 0.03
     eb = 0.38 + 0.42 * abs(sa)
     fb = 0.1 + 0.9 * abs(ca)   # bright face-on, dim edge-on
     bb = fb                        # same ramp for back face
 
 
     # ── Side-wall geometry ────────────────────────────────────────────────
-    # The extrusion side wall is only visible at the OUTER SILHOUETTE EDGE
-    # of the logo — never inside gaps between characters.
-    #
-    # Root cause of previous bug: sweeping mid-samples from x_front to
-    # x_back crossed internal logo spaces, creating false interior │ chars.
-    #
-    # Fix: for each row, find the outermost face-hit column and place wall
-    # chars just OUTSIDE it.
-    #   sa > 0  →  wall on LEFT  of leftmost  face-hit per row
-    #   sa < 0  →  wall on RIGHT of rightmost face-hit per row
     show_sides = abs(sa) > 0.08 and not edge_on
     wall_left  = (sa > 0) == front_closer  # flip side when back face is visible
     # Physical width of visible extrusion edge in screen columns
@@ -308,18 +258,13 @@ def main():
         logo = render(angle)
 
         n   = max(len(logo), len(info))
-        # Reset color at start of each frame so previous frame never bleeds
-        #out = [HOME + RST]
         out=[]
         for i in range(n):
-            # Pad missing logo rows to same visual width so info column never shifts
             lp = logo[i] if i < len(logo) else LOGO_W
             ip = info[i] if i < len(info) else ''
-            # RST between logo and info so logo red never bleeds into info colours
             out.append(f' {lp}{RST}  {ip}{RST}')
         out.append('')   # trailing newline, no extra RST line needed
 
-        #sys.stdout.write('\n'.join(out))
         sys.stdout.write(HOME + RST + '\n'.join(out)+prompt)
         sys.stdout.flush()
 
