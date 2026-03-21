@@ -4,6 +4,9 @@
 stty -ixon # disables ctrl-s freeze 
 alias r='sudo su' # alias su root
 alias sl="ls" 
+alias s="ls" 
+alias d="cd" 
+alias c="cd" 
 alias cd="cd -P"
 alias dc="cd" 
 alias l="ls -lha" 
@@ -11,7 +14,8 @@ alias ll="ls -lha"
 alias la="ls -a" 
 alias dud="du -h -d 0"
 alias sc="source ~/.bashrc; tmux source ~/.tmux.conf; echo sourced dotfiles!"
-alias tm="tmux split-window -h btop \; select-pane -t 0 \; split-window -v htop \; select-pane -t 0 \; send-keys 'nvtop' C-m"
+#alias tm="tmux split-window -h btop \; select-pane -t 0 \; split-window -v htop \; select-pane -t 0 \; send-keys 'nvtop' C-m"
+alias tm="tmux split-window -h /mnt/s/linux_programs/siomon/sio -m \; split-window -v btop \; select-pane -t 0 \; split-window -v htop \; select-pane -t 0 \; send-keys 'nvtop' C-m"
 alias c="clear"
 alias cd="cd -P"
 alias cp="cp -vrn" # verbose, recurse, no-overwrite 
