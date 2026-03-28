@@ -4,6 +4,8 @@
 stty -ixon # disables ctrl-s freeze 
 alias r='sudo su' # alias su root
 alias sl="ls" 
+alias lcd="ll; cd" 
+alias lscd="ls; cd" 
 alias s="ls" 
 alias d="cd" 
 alias c="cd" 
