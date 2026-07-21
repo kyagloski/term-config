@@ -16,19 +16,32 @@ BOLD  = '\033[1m'
 
 def rgb(r, g, b):  return f'\033[38;2;{r};{g};{b}m'
 
+# ── THEME ────────────────────────────────────────────────────────────────────
+# Change just this one line to retheme the whole logo. (R, G, B), 0-255.
+THEME_COLOR = (25, 200, 160)   # greenish-blue / teal
+
+def _lerp3(c1, c2, t):
+    return tuple(int(c1[i] + (c2[i] - c1[i]) * t) for i in range(3))
+
+def _lighten(c, amt):
+    return tuple(int(v + (255 - v) * amt) for v in c)
+
+def _darken(c, amt):
+    return tuple(max(0, int(v * (1 - amt))) for v in c)
+
+# Face: dim/dark version of the theme color up to a lightened highlight
+_FACE_DARK   = _darken(THEME_COLOR, 0.90)
+_FACE_BRIGHT = _lighten(THEME_COLOR, 0.35)
+
+# Edge (extrusion sides): darker & less saturated than the face
+_EDGE_DARK   = _darken(THEME_COLOR, 0.94)
+_EDGE_BRIGHT = _darken(THEME_COLOR, 0.20)
+
 def _face_lut(n=256):
-    out = []
-    for i in range(n):
-        t = i / (n - 1)
-        out.append(rgb(int(5 + t*(50-5)), int(30 + t*(220-30)), int(5 + t*(30-5))))
-    return out
+    return [rgb(*_lerp3(_FACE_DARK, _FACE_BRIGHT, i / (n - 1))) for i in range(n)]
 
 def _edge_lut(n=256):
-    out = []
-    for i in range(n):
-        t = i / (n - 1)
-        out.append(rgb(int(4 + t*(30-4)), int(20 + t*(180-20)), int(4 + t*(20-4))))
-    return out
+    return [rgb(*_lerp3(_EDGE_DARK, _EDGE_BRIGHT, i / (n - 1))) for i in range(n)]
 
 FACE_LUT = _face_lut()
 EDGE_LUT = _edge_lut()
@@ -58,6 +71,27 @@ _LOGO_RAW = [
     "            `\"Y$b._        ",
     "                `\"\"\"       ",
 ]
+
+_LOGO_RAW=[
+"                  -`                   ",
+"                 .o+`                  ",
+"                `ooo/                  ",
+"               `+oooo:                 ",
+"              `+oooooo:                ",
+"              -+oooooo+:               ",
+"            `/:-:++oooo+:              ",
+"           `/++++/+++++++:             ",
+"          `/++++++++++++++:            ",
+"         `/+++ooooooooooooo/`          ",
+"        ./ooosssso++osssssso+`         ",
+"       .oossssso-````/ossssss+`        ",
+"      -osssssso.      :ssssssso.       ",
+"     :osssssss/        osssso+++.      ",
+"    /ossssssss/        +ssssooo/-      ",
+"  `/ossssso+/:-        -:/+osssso+-    ",
+" `+sso+:-`                 `.-/+oso:   ", 
+"`++:.                           `-/+/  ", 
+".`                                 `/  "]
 
 LW   = max(len(r) for r in _LOGO_RAW)
 LOGO = [r.ljust(LW) for r in _LOGO_RAW]
@@ -128,19 +162,24 @@ def render(angle: float) -> list[str]:
         b_hit   = back_in  & row_mask[bcf]
         visible = f_hit if front_closer else b_hit   # cols that show logo char
 
-        # Build per-row side-wall mask: only at the outer silhouette edge
+        # Build per-row side-wall mask at EVERY silhouette edge (both the
+        # outer boundary and any inner gaps, e.g. the underside of the
+        # arch between its two legs), not just the outermost edge.
         s_hit = np.zeros(LW, dtype=bool)
         if show_sides:
             hit_idx = np.where(visible)[0]
             if len(hit_idx) > 0:
-                if wall_left:
-                    edge = int(hit_idx[0])
-                    for c in range(max(0, edge - n_wall), edge):
-                        s_hit[c] = True
-                else:
-                    edge = int(hit_idx[-1])
-                    for c in range(edge + 1, min(LW, edge + n_wall + 1)):
-                        s_hit[c] = True
+                splits = np.where(np.diff(hit_idx) > 1)[0] + 1
+                runs = np.split(hit_idx, splits)
+                for run in runs:
+                    if wall_left:
+                        edge = int(run[0])
+                        for c in range(max(0, edge - n_wall), edge):
+                            s_hit[c] = True
+                    else:
+                        edge = int(run[-1])
+                        for c in range(edge + 1, min(LW, edge + n_wall + 1)):
+                            s_hit[c] = True
 
         buf = []
         for c in range(LW):
@@ -168,12 +207,12 @@ def render(angle: float) -> list[str]:
 
 # ─── system info ──────────────────────────────────────────────────────────────
 def sysinfo() -> list[str]:
-    R = '\033[1;31m'; r0 = '\033[0;31m'; N = '\033[0m'
+    R = BOLD + rgb(*THEME_COLOR); r0 = rgb(*THEME_COLOR); N = RST
     if shutil.which('fastfetch'):
         try:
             p = subprocess.run(
                 ['fastfetch', '--logo', 'none',
-                 '--color-keys', '1;31', '--color-separator', '0;31'],
+                 '--color-keys', '1;36', '--color-separator', '0;36'],
                 capture_output=True, text=True, timeout=8,
             )
             out=p.stdout.splitlines()
